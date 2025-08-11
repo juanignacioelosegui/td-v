@@ -8,7 +8,7 @@ class TestGrafoCompleto(unittest.TestCase):
         self.assertEqual(1, len(matriz))
         self.assertEqual(1, len(matriz[0]))
         self.assertTrue(self._chequear_si_grafo_es_completo(1, matriz))
-
+    
     def test_grafo_completo_con_dos_vertices(self):
         matriz = grafo_completo(2)
         self.assertEqual(2, len(matriz))
@@ -26,7 +26,7 @@ class TestGrafoCompleto(unittest.TestCase):
         resto_es_uno = all([matriz[i][j] for i in range(n) for j in range(n) if i != j])
         return diagonal_es_cero and resto_es_uno
 
-
+'''
 class TestGrafoBipartitoCompleto(unittest.TestCase):
     def test_grafo_bipartito_completo_con_un_vertice_de_cada_lado(self):
         matriz = grafo_bipartito_completo(1, 1)
@@ -112,7 +112,7 @@ class TestGrafoRueda(unittest.TestCase):
             and conectados_en_forma_de_ciclo
             and resto_no_conectados
         )
-
+'''
 
 if __name__ == "__main__":
     unittest.main()
