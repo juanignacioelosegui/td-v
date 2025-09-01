@@ -11,31 +11,31 @@ using namespace std;
 
 class Solution
 {
-private:
-    map<int, pair<int, set<int>>> _solution;
+    private:
+        map<int, pair<int, set<int>>> _solution;
 
-public:
-    //  Constructor
-    explicit Solution( int numInfluencers );
+    public:
+        //  Constructor
+        explicit Solution( int /*numInfluencers*/ = 0);
 
-    //  Modificadores
-    void addInfluencer( int influencer, const Instance & inst );
-    void removeInfluencer( int influencer );
-    void clear();
+        //  Modificadores
+        void addInfluencer( int influencer, const Instance & inst );
+        void removeInfluencer( int influencer );
+        void clear();
 
-    //  Observadores
-    bool containsInfluencer( int influencer ) const;
-    int size() const;
+        //  Observadores
+        bool containsInfluencer( int influencer ) const;
+        int size() const;
 
-    //  Calculos
-    int totalCost() const;
-    set<int> coveredSegments() const;
-    bool coversAll( const Instance & inst ) const;
-    set<int> uncoveredSegments( const Instance & inst ) const;
-    vector<int> chosenInfluencers() const;
+        //  Calculos
+        int totalCost() const;
+        set<int> coveredSegments() const;
+        bool coversAll( const Instance & inst ) const;
+        set<int> uncoveredSegments( const Instance & inst ) const;
+        vector<int> chosenInfluencers() const;
 
-    //  Print
-    void printSolution() const;
+        //  Print
+        void printSolution() const;
 };
 
 #endif

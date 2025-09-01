@@ -2,10 +2,10 @@
 #include <algorithm>
 #include <iostream>
 
-Solution::Solution( int numInfluencers ) { _solution.clear(); }
+Solution::Solution( int /*numInfluencers*/ ) { _solution.clear(); }
 
 void Solution::addInfluencer( int influencer, const Instance & inst ) {
-    if ( !containsInfluencer( influencer ) && inst.hasInfluencer( influencer ))
+    if ( !containsInfluencer( influencer ) && inst.hasInfluencer( influencer ) )
     { 
         // si NO está en el subconjunto y SÍ es un influencer válido
         _solution.insert({influencer, inst.getInfluencer(influencer)}); 
