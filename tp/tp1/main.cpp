@@ -7,34 +7,33 @@
 
 using namespace std;
 
-// ==== PONÉ TU RUTA ACÁ ====
-// Carpeta con todas las instancias:
+//  Carpeta con todas las instancias:
 static const string INST_DIR  = "/home/chipi/Desktop/td-v/tp/tp1/selected_instances/";
-// Archivo por defecto a usar dentro de esa carpeta:
+//  Archivo por defecto a usar dentro de esa carpeta:
 static const string INST_FILE = "ninstance_305.txt";
-// ==========================
+//  ==========================
 
-int main(int argc, char* argv[])
+int main( int argc, char* argv[] )
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    ios::sync_with_stdio( false );
+    cin.tie( nullptr );
 
-    // 1) Resolver la ruta de la instancia
+    //  1) Resolver la ruta de la instancia
     string instancePath;
-    if ( argc >= 2 )
+    if ( aSrgc >= 2 )
     {
-        // Si pasás la ruta completa por CLI, se usa esa
-        // Ej: ./prog /ruta/a/instancia.txt
+        //  Si pasás la ruta completa por CLI, se usa esa
+        //  Ej: ./prog /ruta/a/instancia.txt
         instancePath = argv[1];
         std::cout << "Usando ruta recibida por CLI: " << instancePath << "\n";
     } else {
         //  Si no, usa INST_DIR + INST_FILE (modificá arriba)
         instancePath = INST_DIR + INST_FILE;
         std::cout << "Usando ruta por defecto: " << instancePath << "\n";
-        std::cout << "Tip: podés pasar ruta completa por CLI: ./prog /ruta/a/instancia.txt\n";
     }
+        std::cout << "Tip: podés pasar ruta completa por CLI: ./prog /ruta/a/instancia.txt\n";
 
-    // 2) Cargar la instancia elegida
+    //  2) Cargar la instancia elegida
     Instance inst;
     std::cout << "Cargando archivo '" << instancePath << "'...\n";
     if ( !inst.loadFromFile( instancePath ) ) {
