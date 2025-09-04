@@ -11,7 +11,7 @@ private:
 
 public:
     BacktrackingSolver();
-    Solution solve(const Instance& inst);
+    Solution solve(const Instance& instance, Solution sol_parcial, int i, Solution bestSolution);
 };
 
 #endif // BACKTRACKING_SOLVER_H

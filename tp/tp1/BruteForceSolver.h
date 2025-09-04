@@ -1,12 +1,20 @@
-#ifndef BRUTEFORCESOLVER_H
-#define BRUTEFORCESOLVER_H
+#ifndef BRUTEFORCE_SOLVER_H
+#define BRUTEFORCE_SOLVER_H
 
 #include "Instance.h"
 #include "Solution.h"
 
-namespace BruteForceSolver
-{
-  Solution solve( const Instance & instance );
-}
+class BruteForceSolver {
+private:
 
-#endif // BRUTEFORCESOLVER_H
+public:
+    BruteForceSolver();
+    Solution solve(const Instance& instance, Solution sol_parcial, int i);
+    
+    
+    
+};
+
+#endif // BRUTEFORCE_SOLVER_H
+
+

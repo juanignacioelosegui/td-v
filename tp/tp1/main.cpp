@@ -1,105 +1,96 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem> 
+#include <climits> 
+#include <algorithm>
+#include <chrono>
 #include "Instance.h"
 #include "Solution.h"
 #include "BruteForceSolver.h"
-
+#include "BacktrackingSolver.h"
 using namespace std;
 
-//  Carpeta con todas las instancias:
-static const string INST_DIR  = "/home/chipi/Desktop/td-v/tp/tp1/selected_instances/";
-//  Archivo por defecto a usar dentro de esa carpeta:
-static const string INST_FILE = "ninstance_305.txt";
-//  ==========================
-
-int main( int argc, char* argv[] )
-{
-    ios::sync_with_stdio( false );
-    cin.tie( nullptr );
-
-    //  1) Resolver la ruta de la instancia
-    string instancePath;
-    if ( aSrgc >= 2 )
-    {
-        //  Si pasás la ruta completa por CLI, se usa esa
-        //  Ej: ./prog /ruta/a/instancia.txt
-        instancePath = argv[1];
-        std::cout << "Usando ruta recibida por CLI: " << instancePath << "\n";
-    } else {
-        //  Si no, usa INST_DIR + INST_FILE (modificá arriba)
-        instancePath = INST_DIR + INST_FILE;
-        std::cout << "Usando ruta por defecto: " << instancePath << "\n";
+static bool run_one(const string& filepath, const string& algorithm) {
+    Instance instance;
+    if (!instance.loadFromFile(filepath)) {
+        cerr << "[FAIL] No pude leer: " << filepath << "\n";
+        return false;
     }
-        std::cout << "Tip: podés pasar ruta completa por CLI: ./prog /ruta/a/instancia.txt\n";
+    cout << "\n===== " << filepath << " =====\n";
+    cout << "=== Instancia cargada correctamente ===\n";
 
-    //  2) Cargar la instancia elegida
-    Instance inst;
-    std::cout << "Cargando archivo '" << instancePath << "'...\n";
-    if ( !inst.loadFromFile( instancePath ) ) {
-        cerr << "Error al leer la instancia: " << instancePath << "\n";
+    if (algorithm == "fb" || algorithm == "both") {
+        BruteForceSolver bruteForceSolver;
+
+        auto t0_fb = std::chrono::steady_clock::now();
+        Solution bruteForceSolution = bruteForceSolver.solve(instance, Solution(), 0);
+        auto t1_fb = std::chrono::steady_clock::now();
+
+        cout << "[FB] Solucion de Fuerza Bruta:\n";
+        bruteForceSolution.printSolution();
+
+        auto us_fb = std::chrono::duration_cast<std::chrono::microseconds>(t1_fb - t0_fb).count();
+        cout << "[FB] Tiempo: " << us_fb << " microsec (" << (us_fb / 1000.0) << " ms)\n";
+    }
+
+    if (algorithm == "bt" || algorithm == "both") {
+        BacktrackingSolver backtrackingSolver;
+
+        auto t0_bt = std::chrono::steady_clock::now();
+        Solution bestBT = Solution();
+        bestBT.setCost(INT_MAX);
+        Solution backtrackingSolution = backtrackingSolver.solve(instance, Solution(), 0, bestBT);
+        auto t1_bt = std::chrono::steady_clock::now();
+
+        cout << "[BT] Solucion de Backtracking:\n";
+        backtrackingSolution.printSolution();
+
+        auto us_bt = std::chrono::duration_cast<std::chrono::microseconds>(t1_bt - t0_bt).count();
+        cout << "[BT] Tiempo: " << us_bt << " microsec (" << (us_bt / 1000.0) << " ms)\n";
+    }
+
+    cout << "---------------------------\n";
+    return true;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        cout << "Uso:\n"
+             << "  " << argv[0] << " <instancia|ALL> <algoritmo>\n"
+             << "  algoritmo: fb | bt | both\n";
         return 1;
     }
-    std::cout << "Instancia cargada. N=" << inst.getNumSegments()
-         << " M=" << inst.getNumInfluencers() << "\n\n";
 
-    // 3) CASO A: Operaciones básicas de Solution
-    std::cout << "=== CASO A: add/remove y printSolution ===\n";
-    Solution sol;
+    string instanceArg = argv[1];
+    string algorithm   = argv[2];
 
-    std::cout << "1) addInfluencer(6)\n";
-    std::cout << "[Esperado] Si M < 6 -> mensaje 'no es válido'. Si M >= 6 y existe 6 -> lo agrega.\n";
-    sol.addInfluencer( 6, inst );
-
-    std::cout << "2) addInfluencer(1)\n";
-    std::cout << "[Esperado] Si existe 1 -> lo agrega (sin error).\n";
-    sol.addInfluencer( 1, inst );
-
-    std::cout << "3) addInfluencer(3)\n";
-    std::cout << "[Esperado] Si existe 3 -> lo agrega (sin error).\n";
-    sol.addInfluencer( 3, inst );
-
-    std::cout << "4) addInfluencer(1) de nuevo\n";
-    std::cout << "[Esperado] Mensaje: 'El influencer 1 ya está en la solución.'\n";
-    sol.addInfluencer( 1, inst );
-
-    std::cout << "\nprintSolution()\n";
-    std::cout << "[Esperado] Lista de influencers elegidos, costo total acumulado y segmentos cubiertos.\n\n";
-    sol.printSolution();
-
-    std::cout << "5) removeInfluencer(3)\n";
-    std::cout << "[Esperado] Si 3 estaba, se elimina; si no, mensaje 'no está en la solución'.\n";
-    sol.removeInfluencer( 3 );
-
-    std::cout << "6) removeInfluencer(4)\n";
-    std::cout << "[Esperado] Si 4 no estaba, mensaje 'no está en la solución'.\n";
-    sol.removeInfluencer( 4 );
-
-    std::cout << "\nprintSolution()\n";
-    std::cout << "[Esperado] Refleja el estado actualizado tras las eliminaciones.\n\n";
-    sol.printSolution();
-
-    // 4) CASO B: Cobertura y helpers
-    std::cout << "=== CASO B: coversAll / uncovered / totalCost ===\n";
-    std::cout << "Con el subconjunto actual:\n";
-    std::cout << "coversAll: " << ( sol.coversAll( inst ) ? "true" : "false" ) << "\n";
-    auto falta = sol.uncoveredSegments( inst );
-    std::cout << "uncovered: {";
-    bool first = true;
-    for ( int s : falta ) { if ( !first ) std::cout << ","; std::cout << s; first = false; }
-    std::cout << "}\n";
-    std::cout << "totalCost: " << sol.totalCost() << "\n\n";
-
-    // 5) CASO C: Fuerza bruta (óptimo sobre esta instancia real)
-    std::cout << "=== CASO C: Fuerza Bruta sobre la instancia elegida ===\n";
-    std::cout << "[Nota] Imprime la solución óptima encontrada (conjunto, costo y cobertura).\n";
-    {
-        Solution best = BruteForceSolver::solve( inst );
-        best.printSolution();
-        std::cout << "coversAll: " << ( best.coversAll( inst ) ? "true" : "false" ) << "\n";
-        std::cout << "totalCost: " << best.totalCost() << "\n";
+    // Caso 1: correr TODAS las instancias .txt de selected_instances/
+    if (instanceArg == "ALL" || instanceArg == "all" || instanceArg == "*") {
+        namespace fs = std::filesystem;
+        fs::path dir = "selected_instances";
+        if (!fs::exists(dir) || !fs::is_directory(dir)) {
+            cerr << "No existe la carpeta: " << dir.string() << "\n";
+            return 1;
+        }
+        vector<fs::path> files;
+        for (const auto& e : fs::directory_iterator(dir)) {
+            if (e.is_regular_file() && e.path().extension() == ".txt")
+                files.push_back(e.path());
+        }
+        sort(files.begin(), files.end());
+        if (files.empty()) {
+            cerr << "No encontre .txt en " << dir.string() << "\n";
+            return 1;
+        }
+        int ok = 0, fail = 0;
+        for (const auto& f : files) (run_one(f.string(), algorithm) ? ++ok : ++fail);
+        cout << "\nResumen: OK=" << ok << " FAIL=" << fail << "\n";
+        return fail ? 2 : 0;
     }
 
-    std::cout << "\n=== Fin de pruebas ===\n";
-    return 0;
+    // Caso 2: correr UNA sola instancia (como ya hacías)
+    string filename = "selected_instances/" + instanceArg + ".txt";
+    bool ok = run_one(filename, algorithm);
+    return ok ? 0 : 1;
 }

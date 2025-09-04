@@ -10,92 +10,85 @@ Instance::Instance() : N(0), M(0) {
     _instancia = {};
 }
 
-bool Instance::loadFromFile(const std::string& filename) {
-    std::ifstream file(filename);
+bool Instance::loadFromFile(const string& filename) {
+    ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Error: Cannot open file " << filename << std::endl;
+        cout << "Error: Cannot open file " << filename << endl;
         return false;
     }
     
     // Leer numero de segmentos
     file >> N;
     if (N <= 0) {
-        std::cerr << "Error: Invalid number of segments" << std::endl;
+        cout << "Error: Invalid number of segments" << endl;
         return false;
     }
     
     // Leer numero de influencers
     file >> M;
     if (M <= 0) {
-        std::cerr << "Error: Invalid number of influencers" << std::endl;
+        cout << "Error: Invalid number of influencers" << endl;
         return false;
     }
     
-    
     // Leer informacion de los influencers
-    std::string line;
-    std::getline(file, line);
+    string line;
+    getline(file, line);
     
-    for (int i = 0; i < M; i++)
-    {
-        std::getline( file, line );
-        std::stringstream ss( line );
-        std::string token;
+    _instancia.clear();
+    for (int i = 0; i < M; i++) {
+        getline(file, line);
+        stringstream ss(line);
+        string token;
         set<int> segments;
         int cost;
         // Leer costo (primer elemento)
-        if ( std::getline( ss, token, ',' ) )
-        {
-            //  el cout es un placeholder, decidir que hacer con el costo
-            cost = std::stoi( token );
-            //  _instancia[i+1] = {cost, {segments}};
-            //  std::cout << "Costo del influencer " << i+1 << ": " << token << std::endl;
-        } else return false;
-        
-        //  Leer segmentos (elementos restantes)
-        while ( std::getline( ss, token, ',' ) )
-        {
-            int segment = std::stoi( token );
-            //el cout es un placeholder, decidir que hacer con los segmentos
-            segments.insert( segment );
-            //std::cout << "Segmento " << segment << " del influencer " << i+1 << std::endl; 
+        if (getline(ss, token, ',')) {
+            cost = stoi(token);
+        } else {
+            return false;
         }
-        _instancia[i+1] = {cost, segments};
+        
+        // Leer segmentos (elementos restantes)
+        while (getline(ss, token, ',')) {
+            int segment = stoi(token);
+            segments.insert(segment);
+        }
+        _instancia.push_back({cost, segments});
     }
+    
     file.close();
     return true;
 }
 
-int Instance::getNumSegments() const { return N; }
-
-int Instance::getNumInfluencers() const { return M; }
-
-bool Instance::hasInfluencer( int influencer ) const
-{
-    return _instancia.find( influencer ) != _instancia.end();
+int Instance::getNumSegments() const {
+    return N;
 }
 
-const pair<int, set<int>> & Instance::getInfluencer( int influencer ) const
-{
-    return _instancia.at( influencer );
+int Instance::getNumInfluencers() const {
+    return M;
+}
+
+const pair<int, set<int>>& Instance::getInfluencer(int influencer) const {
+    return _instancia[influencer];
 }
 
 void Instance::printInstance() const {
-    std::cout << "Numero de segmentos: " << N << "\n";
-    std::cout << "Numero de influencers: " << M << "\n";
+    cout << "Numero de segmentos: " << N << "\n";
+    cout << "Numero de influencers: " << M << "\n";
 
-    for ( const auto & [id, data] : _instancia ) {
-        const auto & [costo, segmentos] = data;
+    for (int i = 0; i < (int)_instancia.size(); i++) {
+        const pair<int, set<int>>& data = _instancia[i];
+        int costo = data.first;
+        const set<int>& segmentos = data.second;
 
-        std::cout << "Influencer " << id
-                  << ": Costo = " << costo
-                  << ", Segmentos = {";
-
-        for ( auto it = segmentos.begin(); it != segmentos.end(); )
-        {
-            std::cout << *it;
-            if ( ++it != segmentos.end() ) std::cout << ", ";
+        cout << "Influencer " << i << ": Costo = " << costo << ", Segmentos = {";
+        bool first = true;
+        for (int seg : segmentos) {
+            if (!first) cout << ", ";
+            cout << seg;
+            first = false;
         }
-        std::cout << "}\n";
+        cout << "}\n";
     }
 }

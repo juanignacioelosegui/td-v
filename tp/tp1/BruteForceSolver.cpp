@@ -1,54 +1,57 @@
 #include "BruteForceSolver.h"
+#include <iostream>
+#include <algorithm>
 #include <climits>
 
-using namespace std;
+BruteForceSolver::BruteForceSolver() {}
 
-namespace BruteForceSolver
-{
-
-    //  DFS recursivo sobre decisiones donde idx es el influencer actual (1..M).
-    static void dfs( const Instance & inst, int idx, int M, Solution & curr, 
-                    int currCost, Solution & best, int & bestCost )
-    {
-        //  Si ya pasamos el último influencer, evaluamos la solución actual
-        if ( idx > M )
-        {
-            if ( curr.coversAll( inst ) && currCost < bestCost )
-            {
-                best = curr;
-                bestCost = currCost;
-            }
-            return;
+//Funciones auxiliares
+namespace {
+    bool coversAll(const Solution& sol_parcial, const Instance& instance) {
+        set<int> segCub = {};
+        set<int> temp = {};
+        for(int i=0; i < sol_parcial.InfluencerSize(); i++){ //itero por toda mi sol parcial
+            int pos = sol_parcial.getInfluencerPos(i); //busco qué influencer es
+            temp = instance.getInfluencer(pos).second; //busco los segmentos que cubre
+            segCub.insert(temp.begin(), temp.end());
         }
-
-        //  1) NO tomar al influencer idx
-        dfs( inst, idx + 1, M, curr, currCost, best, bestCost );
-
-        //  2) Tomar al influencer idx (si existe)
-        if ( inst.hasInfluencer( idx ) )
-        {
-            const auto & info = inst.getInfluencer( idx );
-            int costIdx = info.first;
-
-            curr.addInfluencer( idx, inst );
-            dfs( inst, idx + 1, M, curr, currCost + costIdx, best, bestCost );
-            curr.removeInfluencer( idx );
-        }
+        return (int)segCub.size() == instance.getNumSegments();
     }
 
-    Solution solve( const Instance & inst )
-    {
-        const int M = inst.getNumInfluencers();
-
-        Solution best;
-        int bestCost = INT_MAX; //  +inf básicamente
-
-        Solution curr;
-        //  dfs( inst, idx, M, curr, currCost, best, bestCost )
-        dfs( inst, 1, M, curr, /*currCost=*/0, best, bestCost );
-
-        //  Si no encontramos ninguna solución factible, bestCost seguirá en INT_MAX y 'best' estará vacío.
-        return best;
+    Solution minCost(Solution a, Solution b){
+        if(a.getCost() < b.getCost()){
+            return a;
+        }else{
+            return b;
+        } 
     }
+} //namespace
 
+Solution BruteForceSolver::solve(const Instance& instance, Solution sol_parcial, int i) {
+    //constructores
+    Solution bestSolution = Solution(); //inicializo vector a devolver 
+    Solution a = Solution();
+    Solution b = Solution();
+    //Caso base
+    if (i == instance.getNumInfluencers()) { //recorrí todos los influencers
+        if(coversAll(sol_parcial, instance) == true){ //la solucion cubre los N segmentos
+            return sol_parcial;
+        }else{ //esa rama no sirve
+            Solution vacia = Solution();
+            vacia.setCost(INT_MAX); //seteo costo infinito a rama a descartar pues infinito nunca será minimo
+            return vacia;
+        }
+    }else{    
+        //Caso recursivo
+        b = solve(instance, sol_parcial, i+1); //no lo agrego
+        int costoInfluencer = instance.getInfluencer(i).first;
+        sol_parcial.addInfluencer(i, costoInfluencer);
+        a = solve(instance, sol_parcial, i+1); //agrego al influencer i
+
+       
+        //Comparo a y b y me quedo con la solucion de menor costo
+        bestSolution = minCost(a, b);
+        
+        return bestSolution;
+    }
 }
