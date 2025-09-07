@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style class="vjs-styles-defaults">
+      .video-js {
+        width: 300px;
+        height: 150px;
+      }
+
+      .vjs-fluid {
+        padding-top: 56.25%
+      }
+    </style><style class="vjs-styles-dimensions">
+      .my-video-dimensions {
+        width: 640px;
+        height: 360px;
+      }
+
+      .my-video-dimensions.vjs-fluid {
+        padding-top: 75%;
+      }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="video_data/video-js.css" rel="stylesheet">
+    <script type="text/javascript" id="www-widgetapi-script" src="video_data/www-widgetapi.js" async=""></script><script src="video_data/iframe_api.es"></script><script src="video_data/video.min.js"></script>
+    <script src="video_data/videojs-http-source-selector.min.js"></script>
+    <script src="video_data/videojs-contrib-quality-levels.min.js"></script>
+    <script src="video_data/Youtube.min.js"></script><style type="text/css">.vjs-youtube .vjs-iframe-blocker { display: none; }.vjs-youtube.vjs-user-inactive .vjs-iframe-blocker { display: block; }.vjs-youtube .vjs-poster { background-size: cover; }.vjs-youtube-mobile .vjs-big-play-button { display: none; }</style>
+    <style>
+        html {
+            overflow: hidden;
+        }
+
+        .vjs-big-play-button {
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+        }
+
+        .video-js .vjs-tech {
+            object-fit: contain;
+            /* Ensure the video fills the player area */
+            width: 100%;
+            height: 100%;
+        }
+
+        .intro {
+            width: 100%;
+            position: relative;
+        }
+
+        .popout-video {
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            min-height: 360px;
+            margin: 20px 0;
+        }
+
+        .popout-video--popout {
+            position: fixed;
+            left: 0;
+            bottom: 0 !important;
+            animation: shimmy 0.2s ease;
+        }
+
+        .popout-video--popout>.video-js,
+        .popout-video--popout>video {
+            width: 300px !important;
+            height: 170px !important;
+        }
+
+        .popout-video--popout.popout-video {
+            display: block !important;
+        }
+
+        .bg-video-placeholder {
+            max-width: 640px;
+            height: 360px;
+            background-color: rgba(0, 0, 0, .78);
+            margin: auto;
+        }
+
+        @keyframes shimmy {
+            0% {
+                transform: translate(0, 300px);
+            }
+
+            25% {
+                transform: translate(0, 200px);
+            }
+
+            50% {
+                transform: translate(0, 100px);
+            }
+
+            75% {
+                transform: translate(0, 50px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .popout-video video {
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        .content_video-dimensions {
+            width: 640px !important;
+            height: 360px !important;
+        }
+
+        .vjs-menu li.vjs-menu-item {
+            margin: 0 !important;
+            text-align: center !important;
+        }
+
+        .vjs-menu li.vjs-menu-item.vjs-selected {
+            color: #2b333f !important;
+        }
+
+        .video_course_url a {
+            background: var(--faded-green) 0% 0% no-repeat padding-box;
+            padding: 10px 16px;
+            opacity: 1;
+            border: 1px solid var(--faded-green);
+            max-width: 640px;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        @media (max-width:600px) {
+            .content_video-dimensions {
+                width: 100% !important;
+                height: auto !important;
+                min-height: 200px;
+            }
+        }
+
+        #default_button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 12px;
+            padding: 6px 32px;
+            background-color: #676f76;
+        }
+
+        #video-overlay {
+            transition: opacity 0.3s ease;
+        }
+
+        #play-pause-button {
+            transition: transform 0.2s ease;
+        }
+
+        #play-pause-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+    <title>Instream Video Player</title>
+</head>
+
+<body>
+    <div id="video-container" style="display: flex; justify-content: center;">
+        <!-- Video content will be injected here -->
+    <div preload="auto" class="video-js vjs-default-skin vjs-paused my-video-dimensions vjs-controls-enabled vjs-workinghover vjs-v7 vjs-user-active vjs-http-source-selector" id="my-video" tabindex="-1" lang="en" translate="no" role="region" aria-label="Video Player"><video id="my-video_html5_api" class="vjs-tech" preload="auto" tabindex="-1" src="blob:https://aa.geeksforgeeks.org/eb323f2d-fa0b-41d7-bd0f-e633098170e8"></video><div class="vjs-poster" tabindex="-1" aria-disabled="false" style="background-image: url(&quot;https://media.geeksforgeeks.org/courses/IntroductiontoDP/IntroductiontoDP20241127101418.jpg&quot;);"></div><div class="vjs-text-track-display" translate="yes" aria-live="off" aria-atomic="true"><div style="position: absolute; inset: 0px; margin: 1.5%;"></div></div><div class="vjs-loading-spinner" dir="ltr"><span class="vjs-control-text">Video Player is loading.</span></div><button class="vjs-big-play-button" type="button" title="Play Video" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Play Video</span></button><div class="vjs-control-bar" dir="ltr"><button class="vjs-play-control vjs-control vjs-button" type="button" title="Play" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Play</span></button><div class="vjs-volume-panel vjs-control vjs-volume-panel-horizontal"><button class="vjs-mute-control vjs-control vjs-button vjs-vol-3" type="button" title="Mute" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Mute</span></button><div class="vjs-volume-control vjs-control vjs-volume-horizontal"><div tabindex="0" class="vjs-volume-bar vjs-slider-bar vjs-slider vjs-slider-horizontal" role="slider" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Volume Level" aria-live="polite" aria-valuetext="100%"><div class="vjs-mouse-display"><div class="vjs-volume-tooltip" aria-hidden="true"></div></div><div class="vjs-volume-level"><span class="vjs-control-text"></span></div></div></div></div><div class="vjs-current-time vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Current Time&nbsp;</span><span class="vjs-current-time-display" aria-live="off" role="presentation">0:00</span></div><div class="vjs-time-control vjs-time-divider" aria-hidden="true"><div><span>/</span></div></div><div class="vjs-duration vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Duration&nbsp;</span><span class="vjs-duration-display" aria-live="off" role="presentation">4:46</span></div><div class="vjs-progress-control vjs-control"><div tabindex="0" class="vjs-progress-holder vjs-slider vjs-slider-horizontal" role="slider" aria-valuenow="0.00" aria-valuemin="0" aria-valuemax="100" aria-label="Progress Bar" aria-valuetext="0:00 of 4:46"><div class="vjs-load-progress" style="width: 1.26%;"><span class="vjs-control-text"><span>Loaded</span>: <span class="vjs-control-text-loaded-percentage">1.26%</span></span><div data-start="0.000011" data-end="3.600011" style="left: 0%; width: 100%;"></div></div><div class="vjs-mouse-display"><div class="vjs-time-tooltip" aria-hidden="true"></div></div><div class="vjs-play-progress vjs-slider-bar" aria-hidden="true" style="width: 0%;"><div class="vjs-time-tooltip" aria-hidden="true" style="right: 0px;">0:00</div></div></div></div><div class="vjs-live-control vjs-control vjs-hidden"><div class="vjs-live-display" aria-live="off"><span class="vjs-control-text">Stream Type&nbsp;</span>LIVE</div></div><button class="vjs-seek-to-live-control vjs-control" type="button" title="Seek to live, currently behind live" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Seek to live, currently behind live</span><span class="vjs-seek-to-live-text" aria-hidden="true">LIVE</span></button><div class="vjs-remaining-time vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Remaining Time&nbsp;</span><span aria-hidden="true">-</span><span class="vjs-remaining-time-display" aria-live="off" role="presentation">4:46</span></div><div class="vjs-custom-control-spacer vjs-spacer ">&nbsp;</div><div class="vjs-playback-rate vjs-menu-button vjs-menu-button-popup vjs-control vjs-button"><div class="vjs-playback-rate-value" id="vjs-playback-rate-value-label-my-video_component_254">1x</div><button class="vjs-playback-rate vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Playback Rate" aria-haspopup="true" aria-expanded="false" aria-describedby="vjs-playback-rate-value-label-my-video_component_254"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Playback Rate</span></button><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">2x</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1.5x</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1.25x</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">1x</span><span class="vjs-control-text" aria-live="polite">, selected</span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">0.5x</span><span class="vjs-control-text" aria-live="polite"></span></li></ul></div></div><div class="vjs-chapters-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-chapters-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Chapters" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Chapters</span></button><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-title" tabindex="-1">Chapters</li></ul></div></div><div class="vjs-descriptions-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden vjs-disabled"><button class="vjs-descriptions-button vjs-menu-button vjs-menu-button-popup vjs-button vjs-disabled" type="button" aria-disabled="true" title="Descriptions" aria-haspopup="true" aria-expanded="false" disabled="disabled"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Descriptions</span></button><div class="vjs-menu vjs-hidden"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">descriptions off</span><span class="vjs-control-text" aria-live="polite">, selected</span></li></ul></div></div><div class="vjs-subs-caps-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button"><button class="vjs-subs-caps-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Captions" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Captions</span></button><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-item vjs-texttrack-settings" tabindex="-1" role="menuitem" aria-disabled="false"><span class="vjs-menu-item-text">captions settings</span><span class="vjs-control-text" aria-live="polite">, opens captions settings dialog</span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">captions off</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-selected vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">English</span><span class="vjs-control-text" aria-live="polite">, selected</span></li></ul></div></div><div class="vjs-audio-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-audio-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Audio Track" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Audio Track</span></button><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-item vjs-selected vjs-main-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">default</span><span class="vjs-control-text" aria-live="polite">, selected</span></li></ul></div></div><div class="vjs-http-source-selector vjs-menu-button vjs-menu-button-popup vjs-control vjs-button"><button class="vjs-menu-button vjs-menu-button-popup vjs-icon-cog vjs-button" type="button" aria-disabled="false" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite"></span></button><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Auto</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1080p</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">720p</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">480p</span><span class="vjs-control-text" aria-live="polite">, selected</span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">360p</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">240p</span><span class="vjs-control-text" aria-live="polite"></span></li></ul></div></div><button class="vjs-fullscreen-control vjs-control vjs-button" type="button" title="Fullscreen" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Fullscreen</span></button></div><div class="vjs-error-display vjs-modal-dialog vjs-hidden " tabindex="-1" aria-describedby="my-video_component_520_description" aria-hidden="true" aria-label="Modal Window" role="dialog"><p class="vjs-modal-dialog-description vjs-control-text" id="my-video_component_520_description">This is a modal window.</p><div class="vjs-modal-dialog-content" role="document"></div></div><div class="vjs-modal-dialog vjs-hidden  vjs-text-track-settings" tabindex="-1" aria-describedby="my-video_component_526_description" aria-hidden="true" aria-label="Caption Settings Dialog" role="dialog"><p class="vjs-modal-dialog-description vjs-control-text" id="my-video_component_526_description">Beginning of dialog window. Escape will cancel and close the window.</p><div class="vjs-modal-dialog-content" role="document"><div class="vjs-track-settings-colors"><fieldset class="vjs-fg-color vjs-track-setting"><legend id="captions-text-legend-my-video_component_526">Text</legend><label id="captions-foreground-color-my-video_component_526" class="vjs-label">Color</label><select aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526"><option id="captions-foreground-color-my-video_component_526-White" value="#FFF" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-White" selected="selected">White</option><option id="captions-foreground-color-my-video_component_526-Black" value="#000" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-Black">Black</option><option id="captions-foreground-color-my-video_component_526-Red" value="#F00" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-Red">Red</option><option id="captions-foreground-color-my-video_component_526-Green" value="#0F0" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-Green">Green</option><option id="captions-foreground-color-my-video_component_526-Blue" value="#00F" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-Blue">Blue</option><option id="captions-foreground-color-my-video_component_526-Yellow" value="#FF0" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-Yellow">Yellow</option><option id="captions-foreground-color-my-video_component_526-Magenta" value="#F0F" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-Magenta">Magenta</option><option id="captions-foreground-color-my-video_component_526-Cyan" value="#0FF" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-color-my-video_component_526 captions-foreground-color-my-video_component_526-Cyan">Cyan</option></select><span class="vjs-text-opacity vjs-opacity"><label id="captions-foreground-opacity-my-video_component_526" class="vjs-label">Transparency</label><select aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-opacity-my-video_component_526"><option id="captions-foreground-opacity-my-video_component_526-Opaque" value="1" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-opacity-my-video_component_526 captions-foreground-opacity-my-video_component_526-Opaque" selected="selected">Opaque</option><option id="captions-foreground-opacity-my-video_component_526-SemiTransparent" value="0.5" aria-labelledby="captions-text-legend-my-video_component_526 captions-foreground-opacity-my-video_component_526 captions-foreground-opacity-my-video_component_526-SemiTransparent">Semi-Transparent</option></select></span></fieldset><fieldset class="vjs-bg-color vjs-track-setting"><legend id="captions-background-my-video_component_526">Background</legend><label id="captions-background-color-my-video_component_526" class="vjs-label">Color</label><select aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526"><option id="captions-background-color-my-video_component_526-Black" value="#000" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-Black" selected="selected">Black</option><option id="captions-background-color-my-video_component_526-White" value="#FFF" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-White">White</option><option id="captions-background-color-my-video_component_526-Red" value="#F00" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-Red">Red</option><option id="captions-background-color-my-video_component_526-Green" value="#0F0" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-Green">Green</option><option id="captions-background-color-my-video_component_526-Blue" value="#00F" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-Blue">Blue</option><option id="captions-background-color-my-video_component_526-Yellow" value="#FF0" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-Yellow">Yellow</option><option id="captions-background-color-my-video_component_526-Magenta" value="#F0F" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-Magenta">Magenta</option><option id="captions-background-color-my-video_component_526-Cyan" value="#0FF" aria-labelledby="captions-background-my-video_component_526 captions-background-color-my-video_component_526 captions-background-color-my-video_component_526-Cyan">Cyan</option></select><span class="vjs-bg-opacity vjs-opacity"><label id="captions-background-opacity-my-video_component_526" class="vjs-label">Transparency</label><select aria-labelledby="captions-background-my-video_component_526 captions-background-opacity-my-video_component_526"><option id="captions-background-opacity-my-video_component_526-Opaque" value="1" aria-labelledby="captions-background-my-video_component_526 captions-background-opacity-my-video_component_526 captions-background-opacity-my-video_component_526-Opaque" selected="selected">Opaque</option><option id="captions-background-opacity-my-video_component_526-SemiTransparent" value="0.5" aria-labelledby="captions-background-my-video_component_526 captions-background-opacity-my-video_component_526 captions-background-opacity-my-video_component_526-SemiTransparent">Semi-Transparent</option><option id="captions-background-opacity-my-video_component_526-Transparent" value="0" aria-labelledby="captions-background-my-video_component_526 captions-background-opacity-my-video_component_526 captions-background-opacity-my-video_component_526-Transparent">Transparent</option></select></span></fieldset><fieldset class="vjs-window-color vjs-track-setting"><legend id="captions-window-my-video_component_526">Window</legend><label id="captions-window-color-my-video_component_526" class="vjs-label">Color</label><select aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526"><option id="captions-window-color-my-video_component_526-Black" value="#000" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-Black" selected="selected">Black</option><option id="captions-window-color-my-video_component_526-White" value="#FFF" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-White">White</option><option id="captions-window-color-my-video_component_526-Red" value="#F00" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-Red">Red</option><option id="captions-window-color-my-video_component_526-Green" value="#0F0" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-Green">Green</option><option id="captions-window-color-my-video_component_526-Blue" value="#00F" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-Blue">Blue</option><option id="captions-window-color-my-video_component_526-Yellow" value="#FF0" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-Yellow">Yellow</option><option id="captions-window-color-my-video_component_526-Magenta" value="#F0F" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-Magenta">Magenta</option><option id="captions-window-color-my-video_component_526-Cyan" value="#0FF" aria-labelledby="captions-window-my-video_component_526 captions-window-color-my-video_component_526 captions-window-color-my-video_component_526-Cyan">Cyan</option></select><span class="vjs-window-opacity vjs-opacity"><label id="captions-window-opacity-my-video_component_526" class="vjs-label">Transparency</label><select aria-labelledby="captions-window-my-video_component_526 captions-window-opacity-my-video_component_526"><option id="captions-window-opacity-my-video_component_526-Transparent" value="0" aria-labelledby="captions-window-my-video_component_526 captions-window-opacity-my-video_component_526 captions-window-opacity-my-video_component_526-Transparent" selected="selected">Transparent</option><option id="captions-window-opacity-my-video_component_526-SemiTransparent" value="0.5" aria-labelledby="captions-window-my-video_component_526 captions-window-opacity-my-video_component_526 captions-window-opacity-my-video_component_526-SemiTransparent">Semi-Transparent</option><option id="captions-window-opacity-my-video_component_526-Opaque" value="1" aria-labelledby="captions-window-my-video_component_526 captions-window-opacity-my-video_component_526 captions-window-opacity-my-video_component_526-Opaque">Opaque</option></select></span></fieldset></div><div class="vjs-track-settings-font"><fieldset class="vjs-font-percent vjs-track-setting"><legend id="captions-font-size-my-video_component_526" class="">Font Size</legend><select aria-labelledby="captions-font-size-my-video_component_526"><option id="captions-font-size-my-video_component_526-50" value="0.50" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-50">50%</option><option id="captions-font-size-my-video_component_526-75" value="0.75" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-75">75%</option><option id="captions-font-size-my-video_component_526-100" value="1.00" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-100" selected="selected">100%</option><option id="captions-font-size-my-video_component_526-125" value="1.25" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-125">125%</option><option id="captions-font-size-my-video_component_526-150" value="1.50" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-150">150%</option><option id="captions-font-size-my-video_component_526-175" value="1.75" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-175">175%</option><option id="captions-font-size-my-video_component_526-200" value="2.00" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-200">200%</option><option id="captions-font-size-my-video_component_526-300" value="3.00" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-300">300%</option><option id="captions-font-size-my-video_component_526-400" value="4.00" aria-labelledby="captions-font-size-my-video_component_526 captions-font-size-my-video_component_526-400">400%</option></select></fieldset><fieldset class="vjs-edge-style vjs-track-setting"><legend id="my-video_component_526" class="">Text Edge Style</legend><select aria-labelledby="my-video_component_526"><option id="my-video_component_526-None" value="none" aria-labelledby="my-video_component_526 my-video_component_526-None" selected="selected">None</option><option id="my-video_component_526-Raised" value="raised" aria-labelledby="my-video_component_526 my-video_component_526-Raised">Raised</option><option id="my-video_component_526-Depressed" value="depressed" aria-labelledby="my-video_component_526 my-video_component_526-Depressed">Depressed</option><option id="my-video_component_526-Uniform" value="uniform" aria-labelledby="my-video_component_526 my-video_component_526-Uniform">Uniform</option><option id="my-video_component_526-Dropshadow" value="dropshadow" aria-labelledby="my-video_component_526 my-video_component_526-Dropshadow">Dropshadow</option></select></fieldset><fieldset class="vjs-font-family vjs-track-setting"><legend id="captions-font-family-my-video_component_526" class="">Font Family</legend><select aria-labelledby="captions-font-family-my-video_component_526"><option id="captions-font-family-my-video_component_526-ProportionalSansSerif" value="proportionalSansSerif" aria-labelledby="captions-font-family-my-video_component_526 captions-font-family-my-video_component_526-ProportionalSansSerif" selected="selected">Proportional Sans-Serif</option><option id="captions-font-family-my-video_component_526-MonospaceSansSerif" value="monospaceSansSerif" aria-labelledby="captions-font-family-my-video_component_526 captions-font-family-my-video_component_526-MonospaceSansSerif">Monospace Sans-Serif</option><option id="captions-font-family-my-video_component_526-ProportionalSerif" value="proportionalSerif" aria-labelledby="captions-font-family-my-video_component_526 captions-font-family-my-video_component_526-ProportionalSerif">Proportional Serif</option><option id="captions-font-family-my-video_component_526-MonospaceSerif" value="monospaceSerif" aria-labelledby="captions-font-family-my-video_component_526 captions-font-family-my-video_component_526-MonospaceSerif">Monospace Serif</option><option id="captions-font-family-my-video_component_526-Casual" value="casual" aria-labelledby="captions-font-family-my-video_component_526 captions-font-family-my-video_component_526-Casual">Casual</option><option id="captions-font-family-my-video_component_526-Script" value="script" aria-labelledby="captions-font-family-my-video_component_526 captions-font-family-my-video_component_526-Script">Script</option><option id="captions-font-family-my-video_component_526-SmallCaps" value="small-caps" aria-labelledby="captions-font-family-my-video_component_526 captions-font-family-my-video_component_526-SmallCaps">Small Caps</option></select></fieldset></div><div class="vjs-track-settings-controls"><button type="button" class="vjs-default-button" title="restore all settings to the default values">Reset<span class="vjs-control-text"> restore all settings to the default values</span></button><button type="button" class="vjs-done-button">Done</button></div></div><button class="vjs-close-button vjs-control vjs-button" type="button" aria-disabled="false" title="Close Modal Dialog"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Close Modal Dialog</span></button><p class="vjs-control-text">End of dialog window.</p></div></div></div>
+    <script>
+        // Declaring global variables
+        let player; // VideoJS player instance
+        let imaOptions;
+        let currentVideoIndex = 0;
+        let playlist = [];
+        var youtubeVideo;
+        var youtubeVideoPlayInIndia;
+        let autoplayPlaylistEnabled = true; // Set this to false to disable autoplaye the next video in playlist
+        let adsEnabled = false; // Set this to false to disable ads
+
+        function loadAdScripts() {
+            const scriptsToLoad = [
+                "https://imasdk.googleapis.com/js/sdkloader/ima3.js",
+                "https://cdn.jsdelivr.net/npm/videojs-contrib-ads@6.9.0/dist/videojs.ads.min.js",
+                "https://cdn.jsdelivr.net/npm/videojs-ima@1.6.0/dist/videojs.ima.js"
+            ];
+
+            scriptsToLoad.forEach(scriptUrl => {
+                const script = document.createElement('script');
+                script.src = scriptUrl;
+                script.async = true;
+                document.head.appendChild(script);
+            });
+        }
+
+        function initializePage() {
+            if (adsEnabled) {
+                loadAdScripts();
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                window.addEventListener("message", (event) => {
+                    if (event.data.resp) {
+                        playlist = event.data.resp;
+                        getVideoContent(event.data.resp);
+                    }
+
+                    // Changing the currentVideoIndex when click on the video from playlist
+                    if (event.data.clickedVideoFromPlaylist && typeof (event.data.currentIndex) !== 'undefined' && event.data.currentIndex >= 0) {
+                        currentVideoIndex = event.data.currentIndex;
+                    }
+
+                    if (event.data.playlist) {
+                        if (player) {
+                            player.dispose(); // To destroy the old player instance
+                        }
+                        const videoContainer = document.getElementById('video-container');
+                        if (videoContainer) {
+                            videoContainer.innerHTML = ''; // Clear the old player to load new one
+                        }
+                        getVideoContent(event.data.playlist);
+                    }
+                });
+            });
+        }
+
+        // Call the function to initialize the page
+        initializePage();
+
+        // ************************************** //
+        // ************* FUNCTIONS ************** //
+        // ************************************** //
+
+        // Video URLS
+        let GFG_VIDEO_URL = 'https://videos.geeksforgeeks.org/hls/51f1b63616e160911804b2f79ded5f44gfg-MergeSortGeeksforGeeks20220610170254.m3u8'
+        let GFG_VIDEO_TYPE = 'application/x-mpegURL'
+        let YOUTUBE_VIDEO_TYPE = 'video/youtube';
+        let SAMPLE_VIDEO_URL = 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+        let SAMPLE_VIDEO_TYPE = 'video/mp4'
+        let VMAP_URL_LIVE = 'https://aa.geeksforgeeks.org/instream/vast.xml';
+
+        function getVideoContent(resp) {
+            if (resp.length > 0) {
+                resp = resp[0];
+                if (resp.duration && resp.duration < 180) { // 180 seconds
+                    VMAP_URL_LIVE = 'https://aa.geeksforgeeks.org/instream/vast2.xml';
+                }
+
+                youtubeVideo = isYoutubeVideo(resp);
+                youtubeVideoPlayInIndia = canPlayInIndia(resp);
+
+                const largeThumbnail = resp?.meta?.largeThumbnail || "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20220715141141/default-large-video-thumbnail.png";
+                const SUBTITLE_URL = resp?.subtitle
+
+                // Get the Video Container
+                const videoContainer = document.getElementById('video-container');
+                videoContainer.style.display = 'flex';
+                videoContainer.style.justifyContent = 'center';
+
+                // Create the video element 
+                let videoElement = document.createElement('video');
+                videoElement.id = 'my-video';
+                videoElement.className = 'video-js vjs-default-skin';
+                videoElement.setAttribute('controls', 'controls');
+                videoElement.setAttribute('preload', 'auto');
+                videoElement.setAttribute('width', '640px');
+                videoElement.setAttribute('height', '360px');
+                // videoElement.setAttribute('muted', 'muted'); // This will make sure the video is initial muted
+
+                // Add the subtitle track
+                if (SUBTITLE_URL && !youtubeVideo) {
+                    let trackElement = document.createElement('track');
+                    trackElement.setAttribute('kind', 'subtitles');
+                    trackElement.setAttribute('src', SUBTITLE_URL);
+                    trackElement.setAttribute('srclang', 'en');
+                    trackElement.setAttribute('label', 'English');
+                    trackElement.setAttribute('default', 'default');
+
+                    // Append the track to the video element
+                    videoElement.appendChild(trackElement);
+                }
+
+                // Insert the videoElement into the "video-container" div
+                videoContainer.appendChild(videoElement);
+
+                // Initialize the video player
+                if (typeof window.videojs !== 'undefined') {
+                    // Changing video option based on Youtube and non-Youtube video
+                    let video_options = (youtubeVideo && youtubeVideoPlayInIndia) ? {
+                        techOrder: ['youtube', 'html5'],
+                        sources: [{
+                            src: resp.source,
+                            type: YOUTUBE_VIDEO_TYPE
+                        }],
+                        // autoplay: true
+                    } : {
+                        techOrder: ['html5'],
+                        sources: [{
+                            src: resp.source,
+                            type: GFG_VIDEO_TYPE
+                        }],
+                        playbackRates: [0.5, 1, 1.25, 1.5, 2],
+                        poster: largeThumbnail, // Set the poster image
+                        // autoplay: true,
+                    }
+                    player = videojs(videoElement, video_options);
+
+                    if (adsEnabled && !youtubeVideo) {
+                        imaOptions = {
+                            adTagUrl: VMAP_URL_LIVE
+                        };
+
+                        player.ima(imaOptions);
+                    }
+
+                    player.ready(function () {
+                        console.log('Player is ready');
+                    });
+
+                    player.on('play', () => {
+                        if(!youtubeVideo){
+                            handleVideoView(resp);
+                        }
+                    });
+
+                    player.on('error', function () {
+                        console.error('VideoJS Error:', player.error());
+                    });
+
+                    player.on('ended', function () {
+                        currentVideoIndex++;
+                        if (autoplayPlaylistEnabled && currentVideoIndex < playlist.length) {
+                            loadNextVideo(playlist[currentVideoIndex], currentVideoIndex);
+                        }
+                    });
+
+                    if (!youtubeVideo) {
+                        // Ensure the menu is updated with available quality levels
+                        player.qualityLevels().on('addqualitylevel', function () {
+                            player.httpSourceSelector();
+                        });
+                    }
+                } else {
+                    console.error("videojs is not defined in iframe");
+                }
+            }
+        }
+
+        function isYoutubeVideo(resp) {
+            if (resp?.external_youtube && resp?.source) {
+                try {
+                    const url = new URL(resp.source);
+                    const domain = url.hostname;
+
+                    if (domain.includes("geeksforgeeks.org")) {
+                        return false;
+                    }
+                    return true;
+                } catch (error) {
+                    console.error("Invalid Video URL:", resp.source);
+                    return false; // Return false for invalid URLs
+                }
+            }
+            return false;
+        }
+
+        function canPlayInIndia(resp) {
+            if (resp?.visibility === 'india' || resp?.visibility === 'both') {
+                return true;
+            }
+            return false;
+        }
+
+        function loadNextVideo(videoData, currentVideoIndex) {
+            if (player) {
+                player.dispose();
+            }
+            const videoContainer = document.getElementById('video-container');
+            if (videoContainer) {
+                videoContainer.innerHTML = '';
+            }
+
+            window.parent.postMessage({
+                type: 'AUTOPLAYED_NEXT_VIDEO',
+                autoplayPlaylistEnabled: autoplayPlaylistEnabled,
+                videoData: videoData,
+                currentVideoIndex: currentVideoIndex
+            }, '*');
+
+            getVideoContent([videoData]);
+        }
+
+        const handleVideoView = async (resp) => {
+            try {
+                const slug = resp?.slug;
+                const csrfToken = await fetchCSRFToken();
+                await updateVideoView(slug, csrfToken);
+            } catch (error) {
+                console.error('Error updating handling video view:', error);
+            }
+        }
+
+        const fetchCSRFToken = async () => {
+            try {
+                const response = await fetch('https://apiscript.geeksforgeeks.org/get-csrf-token/', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const csrfToken = getCookie('csrftoken');
+                    if (csrfToken) {
+                        return csrfToken;
+                    } else {
+                        throw new Error('CSRF token not found in cookies');
+                    }
+                } else {
+                    throw new Error('Failed to fetch CSRF token');
+                }
+            } catch (error) {
+                throw new Error(`Error while fetching CSRF token: ${error.message}`);
+            }
+        }
+
+        const updateVideoView = async (slug, csrfToken) => {
+            const payload = { slug: slug };
+            try {
+                const response = await fetch('https://apiscript.geeksforgeeks.org/update-user-views/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(payload)
+                })
+
+                if (response.ok) {
+                    let successData = await response.json();
+                    console.log(successData);
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to update video views:', errorData);
+                }
+            } catch (error) {
+                console.error('Error while updating video views:', error);
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+
+
+
+</body></html>
