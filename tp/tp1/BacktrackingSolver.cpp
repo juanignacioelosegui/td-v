@@ -3,37 +3,13 @@
 #include <algorithm>
 #include <climits>
 
-//Funciones auxiliares
-namespace { //para evitar problemas de compilación
-    bool coversAll(const Solution& sol_parcial, const Instance& instance) {
-        set<int> segCub = {};
-        for(int i=0; i < sol_parcial.InfluencerSize(); i++){
-            int pos = sol_parcial.getInfluencerPos(i);
-            set<int> temp = instance.getInfluencer(pos).second;
-            segCub.insert(temp.begin(), temp.end());
-        }
-        return (int)segCub.size() == instance.getNumSegments();
-    }
-
-    Solution minCost(Solution a, Solution b){
-        if(a.getCost() < b.getCost()){
-            return a;
-        }else{
-            return b;
-        } 
-    }
-} //namespace
-
 BacktrackingSolver::BacktrackingSolver() {}
 
-Solution BacktrackingSolver::solve(const Instance& instance, Solution sol_parcial, int i, Solution bestSolution) {
-    //constructores 
+Solution BacktrackingSolver::solve(const Instance& instance, Solution& sol_parcial, int i, Solution& bestSolution) {
     int bestCost = bestSolution.getCost(); //busco el costo total de la mejor solucion hasta ahora
-    Solution a = Solution();
-    Solution b = Solution();
     //Caso base
     if (i == instance.getNumInfluencers()) { //recorrí todos los influencers
-        if(coversAll(sol_parcial, instance) == true){ //la solucion cubre los N segmentos
+        if (sol_parcial.getCoveredCount() == instance.getNumSegments()){ //la solucion cubre los N segmentos
             return sol_parcial;
         }else{ //esa rama no sirve
             Solution vacia = Solution();
@@ -43,18 +19,27 @@ Solution BacktrackingSolver::solve(const Instance& instance, Solution sol_parcia
     //podas:
     }else if((sol_parcial.getCost() >= bestCost)){ //Optimalidad: si esta sol tiene MAYOR costo total que la mejor solución vista hasta ahora corto
         return bestSolution; //bestSolution sigue siendo la mejor hasta ahora
-    }else if(coversAll(sol_parcial, instance)){ //Factibilidad: si ya cubrí los N segmentos corto esta rama
+    }else if (sol_parcial.getCoveredCount() == instance.getNumSegments()){ //Factibilidad: si ya cubrí los N segmentos corto esta rama
         return sol_parcial;
     }
     //Caso recursivo
-    b = solve(instance, sol_parcial, i+1, bestSolution); //no lo agrego
-
-    Solution bestAfterB = minCost(b, bestSolution); //si b ya mejoró al bestSolution, poda más eficiente
     int costoInfluencer = instance.getInfluencer(i).first;
-    sol_parcial.addInfluencer(i, costoInfluencer);
-    a = solve(instance, sol_parcial, i+1, bestAfterB); //agrego al influencer i
+    const set<int>& segments = instance.getInfluencer(i).second;
     
-    //Comparo a y b y me quedo con la solucion de menor costo
-    return minCost(a, b);
+    sol_parcial.addInfluencer(i, costoInfluencer, segments);
+    Solution with = solve(instance, sol_parcial, i+1, bestSolution); //agrego al influencer i 
+    
+    if (with.getCost() < bestSolution.getCost()){ //tras agregar tengo costo menor que la mejor sol hasta ahora?
+        bestSolution = with;
+    }
+
+    sol_parcial.removeInfluencer(i, costoInfluencer, segments);
+    Solution without = solve(instance, sol_parcial, i+1, bestSolution); //no lo agrego
+    
+    if (without.getCost() < bestSolution.getCost()){
+        bestSolution = without;
+    }
+
+    return bestSolution;
 
 }

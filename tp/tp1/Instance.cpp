@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <set>
+#include <tuple>
 
 using namespace std;
 
@@ -91,4 +92,23 @@ void Instance::printInstance() const {
         }
         cout << "}\n";
     }
+}
+
+// Divide la instancia en micro y macro influencers según k
+pair<Instance, Instance> Instance::splitBySegmentCount(int k) const { //k va del 1 a N segmentos
+    Instance micro, macro;
+    micro.N = N;
+    macro.N = N;
+    for (const auto& inf : _instancia) {
+        int cost = inf.first;
+        const set<int>& segments = inf.second;
+        if ((int)segments.size() <= k) {
+            micro._instancia.push_back({cost, segments});
+        } else {
+            macro._instancia.push_back({cost, segments});
+        }
+    }
+    micro.M = (int)micro._instancia.size();
+    macro.M = (int)macro._instancia.size();
+    return {micro, macro};
 }

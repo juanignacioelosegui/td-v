@@ -33,6 +33,9 @@ public:
     // Mostrar informacion de la instancia
     void printInstance() const;
 
+    // Divide la instancia en micro y macro influencers según k
+    pair<Instance, Instance> splitBySegmentCount(int k) const;
+
 };
 
 #endif // INSTANCE_H
